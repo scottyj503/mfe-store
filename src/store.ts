@@ -9,14 +9,17 @@
 
 export type Listener<T> = (value: T, oldValue: T | undefined) => void;
 export type Unsubscribe = () => void;
+export type Validator<T> = (value: T) => void | never;
 
-export interface StoreOptions {
+export interface StoreOptions<T extends Record<string, unknown> = Record<string, unknown>> {
   /** Database name for IndexedDB (default: 'local-web-storage') */
   dbName?: string;
   /** Store name within the database (default: 'store') */
   storeName?: string;
   /** Channel name for cross-tab sync (default: dbName) */
   channelName?: string;
+  /** Validators for each key - throw an error to reject invalid values */
+  validators?: { [K in keyof T]?: Validator<T[K]> };
 }
 
 export interface Store<T extends Record<string, unknown>> {
@@ -161,12 +164,13 @@ const emitLocalEvent = <T>(
 // ============================================================================
 
 export const createStore = <T extends Record<string, unknown>>(
-  options: StoreOptions = {}
+  options: StoreOptions<T> = {}
 ): Store<T> => {
   const {
     dbName = 'local-web-storage',
     storeName = 'store',
     channelName = dbName,
+    validators,
   } = options;
 
   // In-memory cache for synchronous access patterns
@@ -235,6 +239,12 @@ export const createStore = <T extends Record<string, unknown>>(
   };
 
   const set = async <K extends keyof T>(key: K, value: T[K]): Promise<void> => {
+    // Run validator if provided (throws on invalid)
+    const validator = validators?.[key];
+    if (validator) {
+      validator(value);
+    }
+
     const oldValue = cache.get(key) as T[K] | undefined;
     cache.set(key, value);
 

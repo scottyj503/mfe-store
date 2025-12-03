@@ -9,6 +9,7 @@ A lightweight, framework-agnostic state store designed for micro frontend archit
 - **Micro frontend friendly** - Independent sites can subscribe without sharing code
 - **Persistent** - Data survives browser restarts via IndexedDB
 - **Cross-tab sync** - Changes propagate to all tabs automatically
+- **Schema validation** - Optional validators to enforce data integrity
 - **Type-safe** - Full TypeScript support with generics
 - **Tiny** - ~2KB minified
 
@@ -202,6 +203,89 @@ document.getElementById('increment').onclick = async () => {
 };
 ```
 
+### Schema Validation
+
+Add optional validators to enforce data integrity. Validators are functions that throw an error to reject invalid values.
+
+**Vanilla JavaScript:**
+
+```javascript
+import { createStore } from 'local-web-storage';
+
+const store = createStore({
+  dbName: 'my-app',
+  validators: {
+    username: (value) => {
+      if (typeof value !== 'string') {
+        throw new Error('username must be a string');
+      }
+      if (value.length < 2) {
+        throw new Error('username must be at least 2 characters');
+      }
+    },
+    age: (value) => {
+      if (typeof value !== 'number') {
+        throw new Error('age must be a number');
+      }
+      if (value < 0 || value > 150) {
+        throw new Error('age must be between 0 and 150');
+      }
+    }
+  }
+});
+
+// Valid - works
+await store.set('username', 'Alice');
+await store.set('age', 30);
+
+// Invalid - throws Error
+try {
+  await store.set('username', 12345);
+} catch (err) {
+  console.error(err.message); // "username must be a string"
+}
+```
+
+**With Zod (bring your own validation library):**
+
+```typescript
+import { createStore } from 'local-web-storage';
+import { z } from 'zod';
+
+const UserSchema = z.object({
+  id: z.string(),
+  name: z.string().min(2),
+  email: z.string().email(),
+});
+
+const store = createStore({
+  dbName: 'my-app',
+  validators: {
+    user: (value) => UserSchema.parse(value),
+  }
+});
+```
+
+**With Valibot (smaller alternative):**
+
+```typescript
+import { createStore } from 'local-web-storage';
+import * as v from 'valibot';
+
+const UserSchema = v.object({
+  id: v.string(),
+  name: v.pipe(v.string(), v.minLength(2)),
+  email: v.pipe(v.string(), v.email()),
+});
+
+const store = createStore({
+  dbName: 'my-app',
+  validators: {
+    user: (value) => v.parse(UserSchema, value),
+  }
+});
+```
+
 ## API Reference
 
 ### `createStore<T>(options?)`
@@ -215,6 +299,7 @@ Creates a new store instance.
 | `dbName` | `string` | `'local-web-storage'` | IndexedDB database name |
 | `storeName` | `string` | `'store'` | Object store name within the database |
 | `channelName` | `string` | `dbName` | BroadcastChannel name for cross-tab sync |
+| `validators` | `{ [key]: (value) => void }` | `undefined` | Validation functions per key (throw to reject) |
 
 **Returns:** `Store<T>`
 
@@ -281,9 +366,13 @@ local-web-storage/
 ├── test-app/               # Integration test app
 │   ├── src/sites/
 │   │   ├── site-a/         # Publisher micro site (vanilla JS)
-│   │   └── site-b/         # Subscriber micro site (vanilla JS)
+│   │   ├── site-b/         # Subscriber micro site (vanilla JS)
+│   │   ├── site-validation/# Validation test site (vanilla JS)
+│   │   └── site-react/     # React integration test site
 │   ├── tests/              # Playwright tests
-│   ├── index.html          # Host page
+│   ├── index.html          # Pub/sub demo (vanilla JS)
+│   ├── validation.html     # Validation demo
+│   ├── react.html          # React demo
 │   └── package.json
 ├── scripts/
 │   └── publish-local.sh    # Publish to local Verdaccio
@@ -310,10 +399,22 @@ cd test-app && npm test
 
 The Playwright tests verify:
 
-- **Pub/Sub**: Site A publishes → Site B receives via CustomEvent
-- **Multiple updates**: Subscriber receives all updates in order
-- **Delete/Clear**: Removing data notifies subscribers
-- **Persistence**: Data survives page reload via IndexedDB
+**Vanilla JS (pub/sub):**
+- Site A publishes → Site B receives via CustomEvent
+- Multiple updates received in order
+- Delete/Clear notifies subscribers
+- Data persists after page reload
+
+**Schema Validation:**
+- Accepts valid values
+- Rejects invalid types (e.g., number instead of string)
+- Rejects values failing custom rules (e.g., string too short)
+
+**React Integration:**
+- `useValue` hook loads and displays state
+- State updates trigger re-renders
+- Validation errors are catchable
+- State persists after reload
 
 ## License
 

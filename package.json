@@ -22,6 +22,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "tc": "tsc --noEmit",
     "dev": "tsc --watch",
     "clean": "rm -rf dist",
     "prepublishOnly": "npm run clean && npm run build",
