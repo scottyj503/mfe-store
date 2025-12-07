@@ -1,5 +1,5 @@
 /**
- * local-web-storage
+ * mfe-store
  * A lightweight, framework-agnostic state store using IndexedDB + pub/sub
  */
 
@@ -12,7 +12,7 @@ export type Unsubscribe = () => void;
 export type Validator<T> = (value: T) => void | never;
 
 export interface StoreOptions<T extends Record<string, unknown> = Record<string, unknown>> {
-  /** Database name for IndexedDB (default: 'local-web-storage') */
+  /** Database name for IndexedDB (default: 'mfe-store') */
   dbName?: string;
   /** Store name within the database (default: 'store') */
   storeName?: string;
@@ -167,7 +167,7 @@ export const createStore = <T extends Record<string, unknown>>(
   options: StoreOptions<T> = {}
 ): Store<T> => {
   const {
-    dbName = 'local-web-storage',
+    dbName = 'mfe-store',
     storeName = 'store',
     channelName = dbName,
     validators,

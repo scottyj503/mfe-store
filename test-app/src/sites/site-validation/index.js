@@ -2,7 +2,7 @@
  * Validation Test Site
  * Tests schema validation functionality
  */
-import { createStore } from 'local-web-storage';
+import { createStore } from 'mfe-store';
 
 const root = document.getElementById('validation-root');
 

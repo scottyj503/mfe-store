@@ -1,11 +1,19 @@
 {
-  "name": "local-web-storage",
+  "name": "mfe-store",
   "version": "0.1.0",
   "description": "Lightweight state store for micro frontends using IndexedDB + pub/sub",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scottyj503/mfe-store.git"
+  },
+  "homepage": "https://github.com/scottyj503/mfe-store#readme",
+  "bugs": {
+    "url": "https://github.com/scottyj503/mfe-store/issues"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",

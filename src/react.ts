@@ -1,5 +1,5 @@
 /**
- * React bindings for local-web-storage
+ * React bindings for mfe-store
  * Optional - only import if using React
  */
 

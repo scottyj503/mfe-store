@@ -2,7 +2,7 @@
  * Site B - Subscriber
  * Subscribes to store changes via CustomEvent (no direct store reference)
  */
-import { subscribeToKey, createStore } from 'local-web-storage';
+import { subscribeToKey, createStore } from 'mfe-store';
 
 const root = document.getElementById('site-b-root');
 

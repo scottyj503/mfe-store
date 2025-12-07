@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('local-web-storage pub/sub', () => {
+test.describe('mfe-store pub/sub', () => {
   test.beforeEach(async ({ page }) => {
     // Clear IndexedDB before each test
     await page.goto('/');

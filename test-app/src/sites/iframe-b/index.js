@@ -2,7 +2,7 @@
  * Iframe B - Subscriber
  * Receives data from Iframe A via BroadcastChannel
  */
-import { createStore } from 'local-web-storage';
+import { createStore } from 'mfe-store';
 
 const root = document.getElementById('iframe-b-root');
 

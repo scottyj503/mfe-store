@@ -1,4 +1,4 @@
-# local-web-storage
+# mfe-store
 
 A lightweight, framework-agnostic state store designed for micro frontend architectures. Uses IndexedDB for persistence and native browser APIs for pub/sub communication.
 
@@ -82,7 +82,7 @@ sequenceDiagram
 ## Installation
 
 ```bash
-npm install local-web-storage
+npm install mfe-store
 ```
 
 ## Quick Start
@@ -90,7 +90,7 @@ npm install local-web-storage
 ### Basic Usage
 
 ```typescript
-import { createStore } from 'local-web-storage';
+import { createStore } from 'mfe-store';
 
 // Define your state shape
 interface AppState {
@@ -128,7 +128,7 @@ The key benefit for micro frontends is that independent applications can subscri
 **Main App (owns the store):**
 
 ```typescript
-import { createStore } from 'local-web-storage';
+import { createStore } from 'mfe-store';
 
 export const store = createStore<AppState>({
   dbName: 'shared-state',
@@ -139,7 +139,7 @@ export const store = createStore<AppState>({
 **Micro Frontend (subscribes without store reference):**
 
 ```typescript
-import { subscribeToKey } from 'local-web-storage';
+import { subscribeToKey } from 'mfe-store';
 
 // Subscribe using only the channel name - no store import needed
 const unsubscribe = subscribeToKey<User>(
@@ -157,8 +157,8 @@ const unsubscribe = subscribeToKey<User>(
 React bindings are available via a separate import to keep the core bundle small for vanilla JS users.
 
 ```typescript
-import { createStore } from 'local-web-storage';
-import { createStoreHooks } from 'local-web-storage/react';
+import { createStore } from 'mfe-store';
+import { createStoreHooks } from 'mfe-store/react';
 
 // Create store
 const store = createStore<AppState>({ dbName: 'my-app' });
@@ -187,7 +187,7 @@ function UserProfile() {
 ### Vanilla JavaScript
 
 ```javascript
-import { createStore } from 'local-web-storage';
+import { createStore } from 'mfe-store';
 
 const store = createStore({ dbName: 'my-app' });
 
@@ -210,7 +210,7 @@ Add optional validators to enforce data integrity. Validators are functions that
 **Vanilla JavaScript:**
 
 ```javascript
-import { createStore } from 'local-web-storage';
+import { createStore } from 'mfe-store';
 
 const store = createStore({
   dbName: 'my-app',
@@ -249,7 +249,7 @@ try {
 **With Zod (bring your own validation library):**
 
 ```typescript
-import { createStore } from 'local-web-storage';
+import { createStore } from 'mfe-store';
 import { z } from 'zod';
 
 const UserSchema = z.object({
@@ -269,7 +269,7 @@ const store = createStore({
 **With Valibot (smaller alternative):**
 
 ```typescript
-import { createStore } from 'local-web-storage';
+import { createStore } from 'mfe-store';
 import * as v from 'valibot';
 
 const UserSchema = v.object({
@@ -296,7 +296,7 @@ Creates a new store instance.
 
 | Option | Type | Default | Description |
 |--------|------|---------|-------------|
-| `dbName` | `string` | `'local-web-storage'` | IndexedDB database name |
+| `dbName` | `string` | `'mfe-store'` | IndexedDB database name |
 | `storeName` | `string` | `'store'` | Object store name within the database |
 | `channelName` | `string` | `dbName` | BroadcastChannel name for cross-tab sync |
 | `validators` | `{ [key]: (value) => void }` | `undefined` | Validation functions per key (throw to reject) |
@@ -358,7 +358,7 @@ This includes all modern browsers (Chrome, Firefox, Safari, Edge). No IE11 suppo
 ### Project Structure
 
 ```
-local-web-storage/
+mfe-store/
 ├── src/                    # Library source
 │   ├── store.ts            # Core store implementation
 │   ├── react.ts            # React bindings (optional)

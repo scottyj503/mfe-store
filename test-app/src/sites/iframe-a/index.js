@@ -2,7 +2,7 @@
  * Iframe A - Publisher
  * Publishes data that Iframe B should receive via BroadcastChannel
  */
-import { createStore } from 'local-web-storage';
+import { createStore } from 'mfe-store';
 
 const root = document.getElementById('iframe-a-root');
 

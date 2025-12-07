@@ -29,7 +29,7 @@ mv package.json.orig package.json
 
 # Install in test-app
 cd test-app
-npm uninstall "local-web-storage" 2>/dev/null || true
-npm install "local-web-storage@$TEST_VERSION" --registry http://localhost:4873
+npm uninstall "mfe-store" 2>/dev/null || true
+npm install "mfe-store@$TEST_VERSION" --registry http://localhost:4873
 
 echo "Done! Package published and installed in test-app"

@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { createStore } from 'local-web-storage';
-import { createStoreHooks } from 'local-web-storage/react';
+import { createStore } from 'mfe-store';
+import { createStoreHooks } from 'mfe-store/react';
 
 // Create store
 const store = createStore({

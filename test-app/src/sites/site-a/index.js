@@ -2,7 +2,7 @@
  * Site A - Publisher
  * Creates the store and publishes data
  */
-import { createStore } from 'local-web-storage';
+import { createStore } from 'mfe-store';
 
 const root = document.getElementById('site-a-root');
 

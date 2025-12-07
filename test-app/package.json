@@ -1,5 +1,5 @@
 {
-  "name": "local-web-storage-test-app",
+  "name": "mfe-store-test-app",
   "version": "0.0.1",
   "private": true,
   "type": "module",
@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "local-web-storage": "^0.1.0-test-ci.1764732682",
+    "mfe-store": "^0.1.0-test-ci.1765077966",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }
